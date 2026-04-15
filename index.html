@@ -102,6 +102,35 @@ h1 {
   height: 520px;
   position: relative;
 }
+.pepe-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-top: 32px;
+  padding: 24px;
+}
+.pepe-card {
+  text-align: center;
+  position: relative;
+}
+.pepe-card img {
+  width: 140px;
+  height: 140px;
+  border-radius: 16px;
+  object-fit: cover;
+}
+.pepe-card .pepe-label {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+.pepe-card .pepe-sub {
+  font-size: 12px;
+  color: #52525b;
+  margin-top: 2px;
+}
 </style>
 </head>
 <body>
@@ -141,6 +170,19 @@ h1 {
   </div>
   <div class="chart-area">
     <canvas id="revenueChart"></canvas>
+  </div>
+</div>
+
+<div class="pepe-container">
+  <div class="pepe-card">
+    <img src="https://i.imgflip.com/7wmp05.jpg" alt="Sad Pepe">
+    <div class="pepe-label old-accent">Old Launch</div>
+    <div class="pepe-sub">more sales, less money per head</div>
+  </div>
+  <div class="pepe-card">
+    <img src="https://i.imgflip.com/4juijn.png" alt="Smug Pepe">
+    <div class="pepe-label new-accent">New Launch</div>
+    <div class="pepe-sub">fewer sales, bigger bags</div>
   </div>
 </div>
 
