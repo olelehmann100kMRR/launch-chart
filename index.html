@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Launch Comparison</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+  background: #09090b;
+  color: #e4e4e7;
+  padding: 48px 56px;
+  min-height: 100vh;
+}
+.header {
+  margin-bottom: 40px;
+}
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #e4e4e7 0%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.subtitle {
+  color: #71717a;
+  font-size: 15px;
+  font-weight: 400;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.stat-card {
+  background: linear-gradient(145deg, #18181b 0%, #111113 100%);
+  border: 1px solid #27272a;
+  border-radius: 16px;
+  padding: 24px;
+  transition: border-color 0.2s;
+}
+.stat-card:hover {
+  border-color: #3f3f46;
+}
+.stat-card .label {
+  font-size: 11px;
+  color: #71717a;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.stat-card .value {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.stat-card .detail {
+  font-size: 13px;
+  color: #52525b;
+  margin-top: 8px;
+  font-weight: 500;
+}
+.old-accent { color: #818cf8; }
+.new-accent { color: #22d3ee; }
+.green { color: #4ade80; }
+.chart-wrapper {
+  background: linear-gradient(145deg, #18181b 0%, #111113 100%);
+  border: 1px solid #27272a;
+  border-radius: 20px;
+  padding: 40px 40px 32px;
+  margin-bottom: 24px;
+}
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.chart-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #d4d4d8;
+}
+.chart-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: rgba(34, 211, 238, 0.1);
+  color: #22d3ee;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+}
+.chart-area {
+  height: 520px;
+  position: relative;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Launch Comparison</h1>
+  <p class="subtitle">Claude Code Workshop ($149) vs Claude Cowork ($197) &mdash; first 2 days from first sale</p>
+</div>
+
+<div class="stats">
+  <div class="stat-card">
+    <div class="label">Old Launch &mdash; 2 Days</div>
+    <div class="value old-accent">$6,705</div>
+    <div class="detail">45 sales &times; $149</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">New Launch &mdash; So Far</div>
+    <div class="value new-accent">$5,713</div>
+    <div class="detail">29 sales &times; $197</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Day 2 by 10am</div>
+    <div class="value green">3.3x</div>
+    <div class="detail">$1,970 vs $596</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Night 1 Revenue</div>
+    <div class="value green">+$167</div>
+    <div class="detail">$3,743 vs $3,576</div>
+  </div>
+</div>
+
+<div class="chart-wrapper">
+  <div class="chart-header">
+    <div class="chart-title">Cumulative Revenue</div>
+    <div class="chart-badge">New launch still selling</div>
+  </div>
+  <div class="chart-area">
+    <canvas id="revenueChart"></canvas>
+  </div>
+</div>
+
+<script>
+const oldMinutes = [
+  0, 52, 54, 58, 63, 66, 71, 101, 105, 106,
+  116, 116, 117, 121, 123, 126, 139, 144, 144, 152,
+  152, 161, 209, 223, 268, 283, 369, 829, 943, 985,
+  987, 1055, 1142, 1170, 1210, 1233, 1267, 1290, 1348,
+  1419, 1427, 1440, 1560, 1614, 1704
+];
+
+const newMinutes = [
+  0, 14, 20, 23, 26, 41, 43, 47, 51, 65,
+  67, 83, 153, 174, 178, 215, 244, 309, 357, 432,
+  432, 515, 529, 560, 576, 787, 847, 921, 971
+];
+
+const oldPrice = 149;
+const newPrice = 197;
+
+function buildRevenue(mins, price) {
+  let points = [{x: 0, y: 0}];
+  mins.forEach((m, i) => {
+    points.push({x: m, y: (i + 1) * price});
+  });
+  return points;
+}
+
+const ctx = document.getElementById('revenueChart');
+
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    datasets: [
+      {
+        label: 'Old Launch ($149)',
+        data: buildRevenue(oldMinutes, oldPrice),
+        borderColor: '#818cf8',
+        backgroundColor: (ctx) => {
+          const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
+          g.addColorStop(0, 'rgba(129,140,248,0.15)');
+          g.addColorStop(1, 'rgba(129,140,248,0)');
+          return g;
+        },
+        borderWidth: 3,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: '#818cf8',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2,
+        stepped: 'after',
+        fill: true,
+        tension: 0,
+      },
+      {
+        label: 'New Launch ($197)',
+        data: buildRevenue(newMinutes, newPrice),
+        borderColor: '#22d3ee',
+        backgroundColor: (ctx) => {
+          const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
+          g.addColorStop(0, 'rgba(34,211,238,0.15)');
+          g.addColorStop(1, 'rgba(34,211,238,0)');
+          return g;
+        },
+        borderWidth: 3,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: '#22d3ee',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2,
+        stepped: 'after',
+        fill: true,
+        tension: 0,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: 'nearest',
+      intersect: false,
+      axis: 'x'
+    },
+    plugins: {
+      legend: {
+        position: 'top',
+        align: 'end',
+        labels: {
+          color: '#a1a1aa',
+          font: { size: 13, weight: '500' },
+          usePointStyle: true,
+          pointStyle: 'circle',
+          padding: 20,
+          boxWidth: 8,
+          boxHeight: 8,
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(24,24,27,0.95)',
+        titleColor: '#e4e4e7',
+        bodyColor: '#a1a1aa',
+        borderColor: '#3f3f46',
+        borderWidth: 1,
+        cornerRadius: 12,
+        padding: 14,
+        titleFont: { size: 13, weight: '600' },
+        bodyFont: { size: 13 },
+        displayColors: true,
+        boxWidth: 8,
+        boxHeight: 8,
+        boxPadding: 6,
+        callbacks: {
+          title: (items) => {
+            const min = Math.round(items[0].parsed.x);
+            const h = Math.floor(min / 60);
+            const m = min % 60;
+            if (h < 1) return `${m}m after first sale`;
+            return `${h}h ${m}m after first sale`;
+          },
+          label: (item) => {
+            const sales = item.dataIndex;
+            return ` $${item.parsed.y.toLocaleString()} (${sales} sales)`;
+          }
+        }
+      },
+      annotation: {
+        annotations: {
+          night1: {
+            type: 'line',
+            xMin: 480,
+            xMax: 480,
+            borderColor: 'rgba(113,113,122,0.3)',
+            borderWidth: 1,
+            borderDash: [6, 4],
+            label: {
+              display: true,
+              content: 'Overnight',
+              position: 'start',
+              color: '#52525b',
+              font: { size: 11, weight: '500' },
+              backgroundColor: 'transparent',
+            }
+          },
+          day2: {
+            type: 'line',
+            xMin: 960,
+            xMax: 960,
+            borderColor: 'rgba(113,113,122,0.3)',
+            borderWidth: 1,
+            borderDash: [6, 4],
+            label: {
+              display: true,
+              content: 'Day 2 morning',
+              position: 'start',
+              color: '#52525b',
+              font: { size: 11, weight: '500' },
+              backgroundColor: 'transparent',
+            }
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        type: 'linear',
+        title: {
+          display: true,
+          text: 'Hours since first sale',
+          color: '#52525b',
+          font: { size: 12, weight: '500' },
+          padding: { top: 12 }
+        },
+        grid: {
+          color: 'rgba(39,39,42,0.5)',
+          lineWidth: 1,
+        },
+        border: { color: '#27272a' },
+        ticks: {
+          color: '#52525b',
+          font: { size: 12 },
+          stepSize: 120,
+          callback: v => Math.round(v / 60) + 'h',
+          padding: 8,
+        },
+        min: 0,
+        max: 1800,
+      },
+      y: {
+        grid: {
+          color: 'rgba(39,39,42,0.5)',
+          lineWidth: 1,
+        },
+        border: { display: false },
+        ticks: {
+          color: '#52525b',
+          font: { size: 12 },
+          callback: v => '$' + (v / 1000).toFixed(1) + 'k',
+          padding: 12,
+          maxTicksLimit: 8,
+        },
+        beginAtZero: true,
+        title: {
+          display: false,
+        },
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
