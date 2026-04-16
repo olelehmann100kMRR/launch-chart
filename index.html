@@ -17,26 +17,17 @@ body {
 }
 .header { margin-bottom: 40px; }
 h1 {
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  margin-bottom: 8px;
+  font-size: 32px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px;
   background: linear-gradient(135deg, #e4e4e7 0%, #a1a1aa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 .subtitle { color: #71717a; font-size: 15px; font-weight: 400; }
 .stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 40px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px;
 }
 .stat-card {
   background: linear-gradient(145deg, #18181b 0%, #111113 100%);
-  border: 1px solid #27272a;
-  border-radius: 16px;
-  padding: 24px;
+  border: 1px solid #27272a; border-radius: 16px; padding: 24px;
   transition: border-color 0.2s;
 }
 .stat-card:hover { border-color: #3f3f46; }
@@ -44,22 +35,15 @@ h1 {
   font-size: 11px; color: #71717a; text-transform: uppercase;
   letter-spacing: 1.2px; font-weight: 600; margin-bottom: 12px;
 }
-.stat-card .value {
-  font-size: 36px; font-weight: 800; letter-spacing: -1px; line-height: 1;
-}
-.stat-card .detail {
-  font-size: 13px; color: #52525b; margin-top: 8px; font-weight: 500;
-}
+.stat-card .value { font-size: 36px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+.stat-card .detail { font-size: 13px; color: #52525b; margin-top: 8px; font-weight: 500; }
 .old-accent { color: #818cf8; }
 .new-accent { color: #22d3ee; }
 .green { color: #4ade80; }
-.red { color: #f87171; }
 .chart-wrapper {
   background: linear-gradient(145deg, #18181b 0%, #111113 100%);
-  border: 1px solid #27272a;
-  border-radius: 20px;
-  padding: 40px 40px 32px;
-  margin-bottom: 24px;
+  border: 1px solid #27272a; border-radius: 20px;
+  padding: 40px 40px 32px; margin-bottom: 24px;
 }
 .chart-header {
   display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
@@ -67,8 +51,8 @@ h1 {
 .chart-title { font-size: 18px; font-weight: 600; color: #d4d4d8; }
 .chart-badge {
   font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 100px;
-  background: rgba(34, 211, 238, 0.1); color: #22d3ee;
-  border: 1px solid rgba(34, 211, 238, 0.2);
+  background: rgba(74, 222, 128, 0.1); color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.2);
 }
 .chart-area { height: 560px; position: relative; }
 .pepe-container {
@@ -83,25 +67,25 @@ h1 {
 <body>
 
 <div class="header">
-  <h1>Launch Comparison — Live</h1>
+  <h1>Launch Comparison — 3 Days</h1>
   <p class="subtitle">Claude Code Workshop ($149) vs Claude Cowork ($197) &mdash; product sales only, no consulting</p>
 </div>
 
 <div class="stats">
   <div class="stat-card">
-    <div class="label">Old Launch &mdash; 2 Days</div>
-    <div class="value old-accent">$6,705</div>
-    <div class="detail">45 sales &times; $149 (product only)</div>
+    <div class="label">Old Launch &mdash; 3 Days</div>
+    <div class="value old-accent">$8,344</div>
+    <div class="detail">56 sales &times; $149</div>
   </div>
   <div class="stat-card">
-    <div class="label">New Launch &mdash; Still Going</div>
-    <div class="value new-accent">$7,289</div>
-    <div class="detail">37 sales &times; $197</div>
+    <div class="label">New Launch &mdash; Day 3 4pm</div>
+    <div class="value new-accent">$9,259</div>
+    <div class="detail">47 sales &times; $197</div>
   </div>
   <div class="stat-card">
-    <div class="label">Gap</div>
-    <div class="value green">+$584</div>
-    <div class="detail">Ahead &amp; still selling</div>
+    <div class="label">Ahead By</div>
+    <div class="value green">+$915</div>
+    <div class="detail">9 fewer sales, more revenue</div>
   </div>
   <div class="stat-card">
     <div class="label">Revenue per Sale</div>
@@ -112,8 +96,8 @@ h1 {
 
 <div class="chart-wrapper">
   <div class="chart-header">
-    <div class="chart-title">Cumulative Revenue</div>
-    <div class="chart-badge">New launch still selling</div>
+    <div class="chart-title">Cumulative Revenue (Product Only)</div>
+    <div class="chart-badge">New launch ahead +$915</div>
   </div>
   <div class="chart-area">
     <canvas id="revenueChart"></canvas>
@@ -124,66 +108,40 @@ h1 {
   <div class="pepe-card">
     <img src="https://i.imgflip.com/7wmp05.jpg" alt="Sad Pepe">
     <div class="pepe-label old-accent">Old Launch</div>
-    <div class="pepe-sub">more sales, less money per head</div>
+    <div class="pepe-sub">56 sales, $8,344</div>
   </div>
   <div class="pepe-card">
     <img src="https://i.imgflip.com/4juijn.png" alt="Smug Pepe">
     <div class="pepe-label new-accent">New Launch</div>
-    <div class="pepe-sub">fewer sales, more revenue, night still going</div>
+    <div class="pepe-sub">47 sales, $9,259 &mdash; still going</div>
   </div>
 </div>
 
 <script>
 // Old launch - minutes from first sale (19:44 Feb 12)
-// Day 1: 22 sales night, Day 2: 21 sales through midnight
 const oldMinutes = [
+  // Day 1 (Feb 12)
   0, 52, 54, 58, 63, 66, 71, 101, 105, 106,
   116, 116, 117, 121, 123, 126, 139, 144, 144, 152,
-  152, 161, 209, 223, 268, 283, 369, 829, 943, 985,
-  987, 1055, 1142, 1170, 1210, 1233, 1267, 1290, 1348,
-  1419, 1427, 1440, 1560, 1614, 1704
+  152, 161, 209, 223,
+  // Day 2 (Feb 13)
+  268, 283, 369, 829, 943, 985, 987, 1055, 1142, 1170,
+  1210, 1233, 1267, 1290, 1348, 1419, 1427, 1440, 1560, 1614,
+  // Day 3 (Feb 14)
+  1704, 1794, 1810, 1972, 2594, 2756, 2764, 2775, 2779, 2791,
+  2809, 2880
 ];
 
 // New launch - minutes from first sale (17:37 Apr 14)
-// Day 1: 19 sales, Day 2: 14 sales through 16:23
 const newMinutes = [
-  0,    // 17:37 Pamela
-  14,   // 17:51 Zoe
-  20,   // 17:57 Jamie
-  23,   // 18:00 Kanishka
-  26,   // 18:03 Kate
-  41,   // 18:18 Arman
-  43,   // 18:20 Felix
-  47,   // 18:23 Alex
-  51,   // 18:28 David
-  65,   // 18:42 Batuhan
-  67,   // 18:44 Adam
-  83,   // 19:00 Peter
-  153,  // 20:10 Dan
-  174,  // 20:31 Kai
-  178,  // 20:35 Karl
-  215,  // 21:12 Miyuko
-  244,  // 21:41 John Cowin
-  309,  // 22:46 Pablo
-  357,  // 23:34 John Welbourn
-  432,  // 00:49 Andrew
-  432,  // 00:49 Simon
-  515,  // 02:12 Vidya
-  529,  // 02:26 Todd
-  560,  // 02:57 Marc
-  576,  // 03:13 Josh
-  787,  // 06:44 Matt Steele
-  847,  // 07:44 Ken
-  921,  // 08:58 Philipp
-  971,  // 09:48 Michael
-  1017, // 10:34 Grant
-  1116, // 12:13 James
-  1197, // 13:34 Marko
-  1366, // 16:23 Chris
-  1435, // 17:32 Stephen
-  1580, // 19:56 Adrian
-  1628, // 20:45 Fabiana
-  1637, // 20:54 Adi
+  // Day 1 (Apr 14)
+  0, 14, 20, 23, 26, 41, 43, 47, 51, 65,
+  67, 83, 153, 174, 178, 215, 244, 309, 357,
+  // Day 2 (Apr 15)
+  432, 432, 515, 529, 560, 576, 787, 847, 921, 971,
+  1017, 1116, 1197, 1366, 1435, 1580, 1628, 1637,
+  // Day 2 late / Day 3
+  1788, 1789, 1847, 2295, 2454, 2511, 2514, 2546, 2757, 2763
 ];
 
 const oldPrice = 149;
@@ -191,9 +149,7 @@ const newPrice = 197;
 
 function buildRevenue(mins, price) {
   let points = [{x: 0, y: 0}];
-  mins.forEach((m, i) => {
-    points.push({x: m, y: (i + 1) * price});
-  });
+  mins.forEach((m, i) => { points.push({x: m, y: (i + 1) * price}); });
   return points;
 }
 
@@ -211,14 +167,10 @@ new Chart(document.getElementById('revenueChart'), {
           g.addColorStop(1, 'rgba(129,140,248,0)');
           return g;
         },
-        borderWidth: 3,
-        pointRadius: 0,
-        pointHoverRadius: 6,
-        pointHoverBackgroundColor: '#818cf8',
-        pointHoverBorderColor: '#fff',
-        pointHoverBorderWidth: 2,
-        stepped: 'after',
-        fill: true,
+        borderWidth: 3, pointRadius: 0,
+        pointHoverRadius: 6, pointHoverBackgroundColor: '#818cf8',
+        pointHoverBorderColor: '#fff', pointHoverBorderWidth: 2,
+        stepped: 'after', fill: true,
       },
       {
         label: 'New Launch ($197)',
@@ -230,14 +182,10 @@ new Chart(document.getElementById('revenueChart'), {
           g.addColorStop(1, 'rgba(34,211,238,0)');
           return g;
         },
-        borderWidth: 3,
-        pointRadius: 0,
-        pointHoverRadius: 6,
-        pointHoverBackgroundColor: '#22d3ee',
-        pointHoverBorderColor: '#fff',
-        pointHoverBorderWidth: 2,
-        stepped: 'after',
-        fill: true,
+        borderWidth: 3, pointRadius: 0,
+        pointHoverRadius: 6, pointHoverBackgroundColor: '#22d3ee',
+        pointHoverBorderColor: '#fff', pointHoverBorderWidth: 2,
+        stepped: 'after', fill: true,
       }
     ]
   },
@@ -264,7 +212,9 @@ new Chart(document.getElementById('revenueChart'), {
             const min = Math.round(items[0].parsed.x);
             const h = Math.floor(min / 60);
             const m = min % 60;
-            if (h < 1) return `${m}m after first sale`;
+            const d = Math.floor(h / 24);
+            const rh = h % 24;
+            if (d > 0) return `Day ${d+1}, ${rh}h ${m}m`;
             return `${h}h ${m}m after first sale`;
           },
           label: (item) => {
@@ -275,20 +225,15 @@ new Chart(document.getElementById('revenueChart'), {
       },
       annotation: {
         annotations: {
-          night1: {
-            type: 'line', xMin: 420, xMax: 420,
-            borderColor: 'rgba(113,113,122,0.25)', borderWidth: 1, borderDash: [6, 4],
-            label: { display: true, content: 'Night 1 ends', position: 'start', color: '#3f3f46', font: { size: 11, weight: '500' }, backgroundColor: 'transparent' }
+          day2: {
+            type: 'line', xMin: 380, xMax: 380,
+            borderColor: 'rgba(113,113,122,0.2)', borderWidth: 1, borderDash: [6, 4],
+            label: { display: true, content: 'Day 2', position: 'start', color: '#3f3f46', font: { size: 11, weight: '500' }, backgroundColor: 'transparent' }
           },
-          day2start: {
-            type: 'line', xMin: 840, xMax: 840,
-            borderColor: 'rgba(113,113,122,0.25)', borderWidth: 1, borderDash: [6, 4],
-            label: { display: true, content: 'Day 2 morning', position: 'start', color: '#3f3f46', font: { size: 11, weight: '500' }, backgroundColor: 'transparent' }
-          },
-          day2evening: {
-            type: 'line', xMin: 1380, xMax: 1380,
-            borderColor: 'rgba(113,113,122,0.25)', borderWidth: 1, borderDash: [6, 4],
-            label: { display: true, content: 'Day 2 evening', position: 'start', color: '#3f3f46', font: { size: 11, weight: '500' }, backgroundColor: 'transparent' }
+          day3: {
+            type: 'line', xMin: 1820, xMax: 1820,
+            borderColor: 'rgba(113,113,122,0.2)', borderWidth: 1, borderDash: [6, 4],
+            label: { display: true, content: 'Day 3', position: 'start', color: '#3f3f46', font: { size: 11, weight: '500' }, backgroundColor: 'transparent' }
           }
         }
       }
@@ -299,8 +244,8 @@ new Chart(document.getElementById('revenueChart'), {
         title: { display: true, text: 'Hours since first sale', color: '#52525b', font: { size: 12, weight: '500' }, padding: { top: 12 } },
         grid: { color: 'rgba(39,39,42,0.5)', lineWidth: 1 },
         border: { color: '#27272a' },
-        ticks: { color: '#52525b', font: { size: 12 }, stepSize: 120, callback: v => Math.round(v / 60) + 'h', padding: 8 },
-        min: 0, max: 1800,
+        ticks: { color: '#52525b', font: { size: 12 }, stepSize: 360, callback: v => Math.round(v / 60) + 'h', padding: 8 },
+        min: 0, max: 3000,
       },
       y: {
         grid: { color: 'rgba(39,39,42,0.5)', lineWidth: 1 },
