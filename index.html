@@ -78,14 +78,14 @@ h1 {
     <div class="detail">56 sales &times; $149</div>
   </div>
   <div class="stat-card">
-    <div class="label">New Launch &mdash; Day 3 4pm</div>
-    <div class="value new-accent">$9,259</div>
-    <div class="detail">47 sales &times; $197</div>
+    <div class="label">New Launch &mdash; Day 3 8pm</div>
+    <div class="value new-accent">$11,032</div>
+    <div class="detail">56 sales &times; $197</div>
   </div>
   <div class="stat-card">
     <div class="label">Ahead By</div>
-    <div class="value green">+$915</div>
-    <div class="detail">9 fewer sales, more revenue</div>
+    <div class="value green">+$2,688</div>
+    <div class="detail">Same sales, 32% more revenue</div>
   </div>
   <div class="stat-card">
     <div class="label">Revenue per Sale</div>
@@ -97,7 +97,7 @@ h1 {
 <div class="chart-wrapper">
   <div class="chart-header">
     <div class="chart-title">Cumulative Revenue (Product Only)</div>
-    <div class="chart-badge">New launch ahead +$915</div>
+    <div class="chart-badge">New launch ahead +$2,688</div>
   </div>
   <div class="chart-area">
     <canvas id="revenueChart"></canvas>
@@ -113,7 +113,7 @@ h1 {
   <div class="pepe-card">
     <img src="https://i.imgflip.com/4juijn.png" alt="Smug Pepe">
     <div class="pepe-label new-accent">New Launch</div>
-    <div class="pepe-sub">47 sales, $9,259 &mdash; still going</div>
+    <div class="pepe-sub">56 sales, $11,032 &mdash; still going</div>
   </div>
 </div>
 
@@ -141,7 +141,8 @@ const newMinutes = [
   432, 432, 515, 529, 560, 576, 787, 847, 921, 971,
   1017, 1116, 1197, 1366, 1435, 1580, 1628, 1637,
   // Day 2 late / Day 3
-  1788, 1789, 1847, 2295, 2454, 2511, 2514, 2546, 2757, 2763
+  1788, 1789, 1847, 2295, 2454, 2511, 2514, 2546, 2757, 2763,
+  2811, 2856, 2859, 2889, 2939, 2953, 2987, 3018, 3022
 ];
 
 const oldPrice = 149;
@@ -245,7 +246,7 @@ new Chart(document.getElementById('revenueChart'), {
         grid: { color: 'rgba(39,39,42,0.5)', lineWidth: 1 },
         border: { color: '#27272a' },
         ticks: { color: '#52525b', font: { size: 12 }, stepSize: 360, callback: v => Math.round(v / 60) + 'h', padding: 8 },
-        min: 0, max: 3000,
+        min: 0, max: 3100,
       },
       y: {
         grid: { color: 'rgba(39,39,42,0.5)', lineWidth: 1 },
