@@ -141,16 +141,18 @@ function toPoints(data) {
   return pts;
 }
 
-// Interpolate old launch revenue at any x (minute mark)
-function oldRevAt(x) {
+// Interpolate revenue at any x (minute mark) for stepped data
+function revAt(data, x) {
   if (x <= 0) return 0;
   let last = 0;
-  for (const [mx, my] of oldData) {
+  for (const [mx, my] of data) {
     if (mx > x) break;
     last = my;
   }
   return last;
 }
+function oldRevAt(x) { return revAt(oldData, x); }
+function newRevAt(x) { return revAt(newData, x); }
 
 // Build gap dataset: shows where new launch is relative to where old was at same time
 // Shading between the two lines
@@ -270,23 +272,33 @@ new Chart(document.getElementById('revenueChart'), {
             if (item.dataset.label === 'Old at same point (reference)') return null;
             return ` $${item.parsed.y.toLocaleString()}`;
           },
-          footer: (items) => {
-            let newVal = null, oldVal = null;
-            items.forEach(i => {
-              if (i.dataset.label.startsWith('New')) newVal = i.parsed.y;
-              if (i.dataset.label.startsWith('Old Launch')) oldVal = i.parsed.y;
-            });
-            if (newVal !== null && oldVal !== null) {
-              const diff = newVal - oldVal;
-              const sign = diff >= 0 ? '+' : '';
-              return `\n${sign}$${diff.toLocaleString()} vs old launch`;
+          afterBody: (items) => {
+            if (!items.length) return [];
+            const x = items[0].parsed.x;
+            const hoveredLabel = items[0].dataset.label || '';
+            const newV = newRevAt(x);
+            const oldV = oldRevAt(x);
+            const lines = [];
+            // Always show the other line's value for context
+            if (hoveredLabel.startsWith('New')) {
+              lines.push(`Old at this point: $${oldV.toLocaleString()}`);
+            } else if (hoveredLabel.startsWith('Old')) {
+              lines.push(`New at this point: $${newV.toLocaleString()}`);
             }
-            return '';
+            return lines;
+          },
+          footer: (items) => {
+            if (!items.length) return '';
+            const x = items[0].parsed.x;
+            const diff = newRevAt(x) - oldRevAt(x);
+            const sign = diff >= 0 ? '+' : '';
+            return `${sign}$${diff.toLocaleString()} delta`;
           }
         },
+        afterBodyColor: '#a1a1aa',
         footerColor: '#4ade80',
-        footerFont: { size: 13, weight: '700' },
-        footerMarginTop: 8
+        footerFont: { size: 14, weight: '700' },
+        footerMarginTop: 10
       },
       annotation: {
         annotations: Object.assign({
@@ -295,7 +307,38 @@ new Chart(document.getElementById('revenueChart'), {
           day3: { type: 'line', xMin: 2880, xMax: 2880, borderColor: 'rgba(113,113,122,0.2)', borderWidth: 1, borderDash: [6, 4],
             label: { display: true, content: 'Day 3', position: 'start', color: '#3f3f46', font: { size: 11 }, backgroundColor: 'transparent' }},
           day4: { type: 'line', xMin: 4320, xMax: 4320, borderColor: 'rgba(113,113,122,0.2)', borderWidth: 1, borderDash: [6, 4],
-            label: { display: true, content: 'Day 4', position: 'start', color: '#3f3f46', font: { size: 11 }, backgroundColor: 'transparent' }}
+            label: { display: true, content: 'Day 4', position: 'start', color: '#3f3f46', font: { size: 11 }, backgroundColor: 'transparent' }},
+          // MONSTERKILL - high-ticket sales
+          monsterkillOld: {
+            type: 'label',
+            xValue: 822, // Mark Hayward $1,950 consulting
+            yValue: 6400,
+            content: ['🔥 MONSTERKILL', '+$1,950 consulting'],
+            color: '#fbbf24',
+            font: { size: 12, weight: '700' },
+            backgroundColor: 'rgba(251,191,36,0.1)',
+            borderColor: 'rgba(251,191,36,0.5)',
+            borderWidth: 1,
+            borderRadius: 8,
+            padding: { x: 10, y: 6 },
+            yAdjust: -50,
+            callout: { display: true, side: 6, borderColor: '#fbbf24', borderWidth: 2 },
+          },
+          monsterkillNew: {
+            type: 'label',
+            xValue: 3078, // Robbie Crabtree $2,800 consulting
+            yValue: 14200,
+            content: ['🔥 MONSTERKILL', '+$2,800 consulting'],
+            color: '#fbbf24',
+            font: { size: 12, weight: '700' },
+            backgroundColor: 'rgba(251,191,36,0.1)',
+            borderColor: 'rgba(251,191,36,0.5)',
+            borderWidth: 1,
+            borderRadius: 8,
+            padding: { x: 10, y: 6 },
+            yAdjust: -50,
+            callout: { display: true, side: 6, borderColor: '#fbbf24', borderWidth: 2 },
+          }
         }, buildGapMilestones())
       }
     },
