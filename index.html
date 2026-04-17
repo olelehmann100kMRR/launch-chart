@@ -141,6 +141,67 @@ function toPoints(data) {
   return pts;
 }
 
+// Interpolate old launch revenue at any x (minute mark)
+function oldRevAt(x) {
+  if (x <= 0) return 0;
+  let last = 0;
+  for (const [mx, my] of oldData) {
+    if (mx > x) break;
+    last = my;
+  }
+  return last;
+}
+
+// Build gap dataset: shows where new launch is relative to where old was at same time
+// Shading between the two lines
+function buildGapShade() {
+  // Only include points where new has data - shade from old level up to new level
+  const pts = [{x: 0, y: 0}];
+  newData.forEach(([x, y]) => {
+    pts.push({x, y});
+  });
+  return pts;
+}
+
+function buildOldReference() {
+  // Old launch's revenue at the same x values as new launch
+  const pts = [{x: 0, y: 0}];
+  newData.forEach(([x]) => {
+    pts.push({x, y: oldRevAt(x)});
+  });
+  return pts;
+}
+
+// Build gap milestone annotations
+function buildGapMilestones() {
+  const marks = [1440, 2880, 4320]; // day 2, 3, 4
+  const annotations = {};
+  marks.forEach((t, i) => {
+    const newRev = (() => {
+      let last = 0;
+      for (const [x, y] of newData) { if (x > t) break; last = y; }
+      return last;
+    })();
+    const oldRev = oldRevAt(t);
+    if (newRev === 0) return;
+    const gap = newRev - oldRev;
+    annotations['gap' + i] = {
+      type: 'label',
+      xValue: t,
+      yValue: (newRev + oldRev) / 2,
+      content: [`+$${gap.toLocaleString()}`],
+      color: '#4ade80',
+      font: { size: 13, weight: '700' },
+      backgroundColor: 'rgba(9,9,11,0.9)',
+      borderColor: 'rgba(74,222,128,0.4)',
+      borderWidth: 1,
+      borderRadius: 8,
+      padding: { x: 10, y: 5 },
+    };
+  });
+  return annotations;
+}
+
 new Chart(document.getElementById('revenueChart'), {
   type: 'line',
   data: {
@@ -149,31 +210,31 @@ new Chart(document.getElementById('revenueChart'), {
         label: 'Old Launch ($149 + $1,950 consulting)',
         data: toPoints(oldData),
         borderColor: '#818cf8',
-        backgroundColor: (ctx) => {
-          const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
-          g.addColorStop(0, 'rgba(129,140,248,0.12)');
-          g.addColorStop(1, 'rgba(129,140,248,0)');
-          return g;
-        },
+        backgroundColor: 'transparent',
         borderWidth: 3, pointRadius: 0,
         pointHoverRadius: 6, pointHoverBackgroundColor: '#818cf8',
         pointHoverBorderColor: '#fff', pointHoverBorderWidth: 2,
-        stepped: 'after', fill: true,
+        stepped: 'after', fill: false, order: 2,
+      },
+      {
+        label: 'Old at same point (reference)',
+        data: buildOldReference(),
+        borderColor: 'transparent',
+        backgroundColor: 'transparent',
+        pointRadius: 0, pointHoverRadius: 0,
+        stepped: 'after', fill: false,
+        order: 4,
+        showLine: false,
       },
       {
         label: 'New Launch ($197 + $2,800 consulting)',
         data: toPoints(newData),
         borderColor: '#22d3ee',
-        backgroundColor: (ctx) => {
-          const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
-          g.addColorStop(0, 'rgba(34,211,238,0.12)');
-          g.addColorStop(1, 'rgba(34,211,238,0)');
-          return g;
-        },
+        backgroundColor: 'rgba(74,222,128,0.18)',
         borderWidth: 3, pointRadius: 0,
         pointHoverRadius: 6, pointHoverBackgroundColor: '#22d3ee',
         pointHoverBorderColor: '#fff', pointHoverBorderWidth: 2,
-        stepped: 'after', fill: true,
+        stepped: 'after', fill: '-2', order: 1,
       }
     ]
   },
@@ -187,6 +248,7 @@ new Chart(document.getElementById('revenueChart'), {
         labels: {
           color: '#a1a1aa', font: { size: 13, weight: '500' },
           usePointStyle: true, pointStyle: 'circle', padding: 20, boxWidth: 8, boxHeight: 8,
+          filter: (item) => item.text !== 'Old at same point (reference)'
         }
       },
       tooltip: {
@@ -208,14 +270,14 @@ new Chart(document.getElementById('revenueChart'), {
         }
       },
       annotation: {
-        annotations: {
+        annotations: Object.assign({
           day2: { type: 'line', xMin: 1440, xMax: 1440, borderColor: 'rgba(113,113,122,0.2)', borderWidth: 1, borderDash: [6, 4],
             label: { display: true, content: 'Day 2', position: 'start', color: '#3f3f46', font: { size: 11 }, backgroundColor: 'transparent' }},
           day3: { type: 'line', xMin: 2880, xMax: 2880, borderColor: 'rgba(113,113,122,0.2)', borderWidth: 1, borderDash: [6, 4],
             label: { display: true, content: 'Day 3', position: 'start', color: '#3f3f46', font: { size: 11 }, backgroundColor: 'transparent' }},
           day4: { type: 'line', xMin: 4320, xMax: 4320, borderColor: 'rgba(113,113,122,0.2)', borderWidth: 1, borderDash: [6, 4],
             label: { display: true, content: 'Day 4', position: 'start', color: '#3f3f46', font: { size: 11 }, backgroundColor: 'transparent' }}
-        }
+        }, buildGapMilestones())
       }
     },
     scales: {
