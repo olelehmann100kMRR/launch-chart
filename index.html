@@ -54,7 +54,7 @@ h1 {
   background: rgba(74, 222, 128, 0.1); color: #4ade80;
   border: 1px solid rgba(74, 222, 128, 0.2);
 }
-.chart-area { height: 560px; position: relative; }
+.chart-area { height: 580px; position: relative; }
 .pepe-container {
   display: flex; justify-content: center; gap: 48px; margin-top: 32px; padding: 24px;
 }
@@ -62,42 +62,55 @@ h1 {
 .pepe-card img { width: 140px; height: 140px; border-radius: 16px; object-fit: cover; }
 .pepe-card .pepe-label { margin-top: 10px; font-size: 14px; font-weight: 600; letter-spacing: -0.3px; }
 .pepe-card .pepe-sub { font-size: 12px; color: #52525b; margin-top: 2px; }
+.note {
+  background: rgba(250, 204, 21, 0.05);
+  border: 1px solid rgba(250, 204, 21, 0.15);
+  border-radius: 12px;
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  color: #a8a29e;
+  font-size: 13px;
+}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>Launch Comparison — 3 Days</h1>
-  <p class="subtitle">Claude Code Workshop ($149) vs Claude Cowork ($197) &mdash; product sales only, no consulting</p>
+  <h1>Launch Comparison — 4 Days</h1>
+  <p class="subtitle">Claude Code Workshop ($149) vs Claude Cowork ($197) &mdash; all sales including high-ticket consulting</p>
+</div>
+
+<div class="note">
+  Note: Old launch shown in full (5 days). New launch only through 8am on day 4 — and still beating the old total.
 </div>
 
 <div class="stats">
   <div class="stat-card">
-    <div class="label">Old Launch &mdash; 3 Days</div>
-    <div class="value old-accent">$8,344</div>
-    <div class="detail">56 sales &times; $149</div>
+    <div class="label">Old Launch — Final</div>
+    <div class="value old-accent">$13,274</div>
+    <div class="detail">77 transactions + $1,950 consulting</div>
   </div>
   <div class="stat-card">
-    <div class="label">New Launch &mdash; Day 3 8pm</div>
-    <div class="value new-accent">$11,032</div>
-    <div class="detail">56 sales &times; $197</div>
+    <div class="label">New Launch — Day 4 8am</div>
+    <div class="value new-accent">$15,211</div>
+    <div class="detail">64 transactions + $2,800 consulting</div>
   </div>
   <div class="stat-card">
     <div class="label">Ahead By</div>
-    <div class="value green">+$2,688</div>
-    <div class="detail">Same sales, 32% more revenue</div>
+    <div class="value green">+$1,937</div>
+    <div class="detail">With 1+ day still to go</div>
   </div>
   <div class="stat-card">
-    <div class="label">Revenue per Sale</div>
-    <div class="value green">+32%</div>
-    <div class="detail">$197 vs $149</div>
+    <div class="label">High-Ticket</div>
+    <div class="value green">+$850</div>
+    <div class="detail">$2,800 vs $1,950</div>
   </div>
 </div>
 
 <div class="chart-wrapper">
   <div class="chart-header">
-    <div class="chart-title">Cumulative Revenue (Product Only)</div>
-    <div class="chart-badge">New launch ahead +$2,688</div>
+    <div class="chart-title">Cumulative Revenue (All Sales)</div>
+    <div class="chart-badge">New launch ahead +$1,937</div>
   </div>
   <div class="chart-area">
     <canvas id="revenueChart"></canvas>
@@ -108,50 +121,24 @@ h1 {
   <div class="pepe-card">
     <img src="https://i.imgflip.com/7wmp05.jpg" alt="Sad Pepe">
     <div class="pepe-label old-accent">Old Launch</div>
-    <div class="pepe-sub">56 sales, $8,344</div>
+    <div class="pepe-sub">$13,274 final (5 days)</div>
   </div>
   <div class="pepe-card">
     <img src="https://i.imgflip.com/4juijn.png" alt="Smug Pepe">
     <div class="pepe-label new-accent">New Launch</div>
-    <div class="pepe-sub">56 sales, $11,032 &mdash; still going</div>
+    <div class="pepe-sub">$15,211 at day 4 morning &mdash; still selling</div>
   </div>
 </div>
 
 <script>
-// Old launch - minutes from first sale (19:44 Feb 12)
-const oldMinutes = [
-  // Day 1 (Feb 12)
-  0, 52, 54, 58, 63, 66, 71, 101, 105, 106,
-  116, 116, 117, 121, 123, 126, 139, 144, 144, 152,
-  152, 161, 209, 223,
-  // Day 2 (Feb 13)
-  268, 283, 369, 829, 943, 985, 987, 1055, 1142, 1170,
-  1210, 1233, 1267, 1290, 1348, 1419, 1427, 1440, 1560, 1614,
-  // Day 3 (Feb 14)
-  1704, 1794, 1810, 1972, 2594, 2756, 2764, 2775, 2779, 2791,
-  2809, 2880
-];
+const oldData = [[0,149],[52,298],[53,447],[58,596],[63,745],[65,894],[71,1043],[100,1192],[104,1341],[105,1490],[115,1639],[116,1788],[117,1937],[121,2086],[122,2235],[126,2384],[138,2533],[143,2682],[143,2831],[151,2980],[152,3129],[160,3278],[209,3427],[223,3576],[268,3725],[282,3874],[368,4023],[822,5973],[828,6122],[943,6271],[984,6420],[987,6569],[1055,6718],[1142,6867],[1169,7016],[1209,7165],[1232,7314],[1267,7463],[1290,7612],[1347,7761],[1418,7910],[1426,8059],[1439,8208],[1559,8357],[1614,8506],[1704,8655],[1794,8804],[1809,8953],[1972,9102],[2594,9251],[2756,9400],[2764,9549],[2774,9698],[2778,9847],[2790,9996],[2808,10145],[2879,10294],[3349,10443],[3403,10592],[3551,10741],[3908,10890],[3918,11039],[4078,11188],[4093,11337],[4104,11486],[4104,11635],[4169,11784],[4200,11933],[4202,12082],[4215,12231],[4236,12380],[4261,12529],[4447,12678],[4490,12827],[4576,12976],[4581,13125],[4589,13274]];
 
-// New launch - minutes from first sale (17:37 Apr 14)
-const newMinutes = [
-  // Day 1 (Apr 14)
-  0, 14, 20, 23, 26, 41, 43, 47, 51, 65,
-  67, 83, 153, 174, 178, 215, 244, 309, 357,
-  // Day 2 (Apr 15)
-  432, 432, 515, 529, 560, 576, 787, 847, 921, 971,
-  1017, 1116, 1197, 1366, 1435, 1580, 1628, 1637,
-  // Day 2 late / Day 3
-  1788, 1789, 1847, 2295, 2454, 2511, 2514, 2546, 2757, 2763,
-  2811, 2856, 2859, 2889, 2939, 2953, 2987, 3018, 3022
-];
+const newData = [[0,197],[14,394],[19,591],[22,788],[26,985],[40,1182],[43,1379],[46,1576],[50,1773],[65,1970],[67,2167],[82,2364],[152,2561],[174,2758],[178,2955],[214,3152],[243,3349],[308,3546],[356,3743],[431,3940],[432,4137],[514,4334],[528,4531],[559,4728],[575,4925],[787,5122],[846,5319],[921,5516],[971,5713],[1017,5910],[1115,6107],[1197,6304],[1366,6501],[1435,6698],[1579,6895],[1628,7092],[1637,7289],[1788,7486],[1788,7683],[1846,7880],[2295,8077],[2454,8274],[2510,8471],[2513,8668],[2546,8865],[2757,9062],[2763,9259],[2811,9456],[2856,9653],[2859,9850],[2888,10047],[2939,10244],[2953,10441],[2986,10638],[3017,10835],[3022,11032],[3055,11229],[3078,11426],[3078,14226],[3439,14423],[3510,14620],[3562,14817],[3605,15014],[3700,15211]];
 
-const oldPrice = 149;
-const newPrice = 197;
-
-function buildRevenue(mins, price) {
-  let points = [{x: 0, y: 0}];
-  mins.forEach((m, i) => { points.push({x: m, y: (i + 1) * price}); });
-  return points;
+function toPoints(data) {
+  const pts = [{x: 0, y: 0}];
+  data.forEach(([x, y]) => pts.push({x, y}));
+  return pts;
 }
 
 new Chart(document.getElementById('revenueChart'), {
@@ -159,8 +146,8 @@ new Chart(document.getElementById('revenueChart'), {
   data: {
     datasets: [
       {
-        label: 'Old Launch ($149)',
-        data: buildRevenue(oldMinutes, oldPrice),
+        label: 'Old Launch ($149 + $1,950 consulting)',
+        data: toPoints(oldData),
         borderColor: '#818cf8',
         backgroundColor: (ctx) => {
           const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
@@ -174,8 +161,8 @@ new Chart(document.getElementById('revenueChart'), {
         stepped: 'after', fill: true,
       },
       {
-        label: 'New Launch ($197)',
-        data: buildRevenue(newMinutes, newPrice),
+        label: 'New Launch ($197 + $2,800 consulting)',
+        data: toPoints(newData),
         borderColor: '#22d3ee',
         backgroundColor: (ctx) => {
           const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
@@ -211,31 +198,23 @@ new Chart(document.getElementById('revenueChart'), {
         callbacks: {
           title: (items) => {
             const min = Math.round(items[0].parsed.x);
-            const h = Math.floor(min / 60);
-            const m = min % 60;
-            const d = Math.floor(h / 24);
-            const rh = h % 24;
-            if (d > 0) return `Day ${d+1}, ${rh}h ${m}m`;
-            return `${h}h ${m}m after first sale`;
+            const d = Math.floor(min / 1440);
+            const remMin = min - d * 1440;
+            const h = Math.floor(remMin / 60);
+            const m = remMin % 60;
+            return `Day ${d+1}, ${h}h ${m}m in`;
           },
-          label: (item) => {
-            const sales = item.dataIndex;
-            return ` $${item.parsed.y.toLocaleString()} (${sales} sales)`;
-          }
+          label: (item) => ` $${item.parsed.y.toLocaleString()}`
         }
       },
       annotation: {
         annotations: {
-          day2: {
-            type: 'line', xMin: 380, xMax: 380,
-            borderColor: 'rgba(113,113,122,0.2)', borderWidth: 1, borderDash: [6, 4],
-            label: { display: true, content: 'Day 2', position: 'start', color: '#3f3f46', font: { size: 11, weight: '500' }, backgroundColor: 'transparent' }
-          },
-          day3: {
-            type: 'line', xMin: 1820, xMax: 1820,
-            borderColor: 'rgba(113,113,122,0.2)', borderWidth: 1, borderDash: [6, 4],
-            label: { display: true, content: 'Day 3', position: 'start', color: '#3f3f46', font: { size: 11, weight: '500' }, backgroundColor: 'transparent' }
-          }
+          day2: { type: 'line', xMin: 1440, xMax: 1440, borderColor: 'rgba(113,113,122,0.2)', borderWidth: 1, borderDash: [6, 4],
+            label: { display: true, content: 'Day 2', position: 'start', color: '#3f3f46', font: { size: 11 }, backgroundColor: 'transparent' }},
+          day3: { type: 'line', xMin: 2880, xMax: 2880, borderColor: 'rgba(113,113,122,0.2)', borderWidth: 1, borderDash: [6, 4],
+            label: { display: true, content: 'Day 3', position: 'start', color: '#3f3f46', font: { size: 11 }, backgroundColor: 'transparent' }},
+          day4: { type: 'line', xMin: 4320, xMax: 4320, borderColor: 'rgba(113,113,122,0.2)', borderWidth: 1, borderDash: [6, 4],
+            label: { display: true, content: 'Day 4', position: 'start', color: '#3f3f46', font: { size: 11 }, backgroundColor: 'transparent' }}
         }
       }
     },
@@ -245,8 +224,8 @@ new Chart(document.getElementById('revenueChart'), {
         title: { display: true, text: 'Hours since first sale', color: '#52525b', font: { size: 12, weight: '500' }, padding: { top: 12 } },
         grid: { color: 'rgba(39,39,42,0.5)', lineWidth: 1 },
         border: { color: '#27272a' },
-        ticks: { color: '#52525b', font: { size: 12 }, stepSize: 360, callback: v => Math.round(v / 60) + 'h', padding: 8 },
-        min: 0, max: 3100,
+        ticks: { color: '#52525b', font: { size: 12 }, stepSize: 720, callback: v => Math.round(v / 60) + 'h', padding: 8 },
+        min: 0, max: 5000,
       },
       y: {
         grid: { color: 'rgba(39,39,42,0.5)', lineWidth: 1 },
