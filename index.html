@@ -266,8 +266,27 @@ new Chart(document.getElementById('revenueChart'), {
             const m = remMin % 60;
             return `Day ${d+1}, ${h}h ${m}m in`;
           },
-          label: (item) => ` $${item.parsed.y.toLocaleString()}`
-        }
+          label: (item) => {
+            if (item.dataset.label === 'Old at same point (reference)') return null;
+            return ` $${item.parsed.y.toLocaleString()}`;
+          },
+          footer: (items) => {
+            let newVal = null, oldVal = null;
+            items.forEach(i => {
+              if (i.dataset.label.startsWith('New')) newVal = i.parsed.y;
+              if (i.dataset.label.startsWith('Old Launch')) oldVal = i.parsed.y;
+            });
+            if (newVal !== null && oldVal !== null) {
+              const diff = newVal - oldVal;
+              const sign = diff >= 0 ? '+' : '';
+              return `\n${sign}$${diff.toLocaleString()} vs old launch`;
+            }
+            return '';
+          }
+        },
+        footerColor: '#4ade80',
+        footerFont: { size: 13, weight: '700' },
+        footerMarginTop: 8
       },
       annotation: {
         annotations: Object.assign({
